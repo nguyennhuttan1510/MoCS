@@ -1,0 +1,31 @@
+$fontWeight: 700;
+.site-layout {
+  .content {
+    margin: 0px 16px;
+    .breadcrumb_title {
+      margin: 16px 0px;
+      font-weight: $fontWeight;
+    }
+    .site-layout-background {
+      .list_table {
+        margin-bottom: 30px;
+        .table {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 80px;
+          height: 80px;
+          background-color: lightseagreen;
+          color: black;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .header_home_page {
+    color: white;
+    padding: 0px 0px 0px 50px;
+    font-weight: $fontWeight;
+    font-size: 24px;
+  }
+}
