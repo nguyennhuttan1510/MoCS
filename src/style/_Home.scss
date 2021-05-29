@@ -28,4 +28,15 @@ $fontWeight: 700;
     font-weight: $fontWeight;
     font-size: 24px;
   }
+  .close_table {
+    position: absolute;
+    border-bottom-left-radius: 12px;
+    border-color: #fd3434;
+    top: 64px;
+    padding: 5px 20px;
+    background-color: #fd3434;
+    right: 0px;
+    color: white;
+    font-weight: 800;
+  }
 }
