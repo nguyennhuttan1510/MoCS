@@ -1,75 +1,137 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Menu, Breadcrumb, Row, Col } from 'antd';
 import '../../style/_Home.scss'
-import {
-    DesktopOutlined,
-    PieChartOutlined,
-    FileOutlined,
-    TeamOutlined,
-    UserOutlined,
-} from '@ant-design/icons';
+import TableDetail from './components/TableDetail';
+import ListTable from './components/ListTable';
+import { Order } from '../../util/DataTable';
+import { food, order } from '../../interfaces/Home';
+import { useDispatch } from 'react-redux';
+import { path } from 'Reduces/dashboard'
 
-const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
+
 
 const Home: React.FC = props => {
-    const [collapsed, setCollapsed] = useState(false);
 
-    const onCollapse = () => {
-        setCollapsed(!collapsed);
-    };
+    const order = [
+        {
+            id: 1,
+            name: "Table 1",
+            menu: [
+                {
+                    id: 1,
+                    name: "mì xào",
+                    count: 2,
+                    price: 40000,
+                    discount: 20,
+                    total: 80000,
+                },
+                {
+                    id: 1,
+                    name: "mì xào",
+                    count: 2,
+                    price: 40000,
+                    discount: 10,
+                    total: 80000,
+                },
+                {
+                    id: 1,
+                    name: "mì xào",
+                    count: 2,
+                    price: 40000,
+                    discount: 20,
+                    total: 80000,
+                },
+                {
+                    id: 1,
+                    name: "mì xào",
+                    count: 2,
+                    price: 40000,
+                    discount: 20,
+                    total: 80000,
+                },
+            ],
+            total_cost: 10000
+        }
+    ]
+        ;
+
+    const [isDetail, setIsDetail] = useState<boolean>(false);
+    const [orders, setOrders] = useState<Array<order>>(order);
+    const [idTable, setIdTable] = useState<number>();
+    const dispatch = useDispatch();
+
+    const data = () => {
+        const result = orders.filter((item) => item.id === idTable);
+        return result[0];
+
+    }
+
+    const handleSelectTable = (objTable: order) => {
+        if (objTable?.id) {
+            const initObjTable = {
+                id: objTable.id,
+                name: objTable.name,
+                menu: [],
+                total_cost: 0
+            }
+            const result = orders.filter((item) => item.id === objTable.id);
+            console.log(result)
+            console.log("into handleSelectTable");
+            if (result.length === 0) {
+                setOrders([...orders, initObjTable])
+            }
+            setIdTable(objTable.id)
+            setIsDetail(!isDetail);
+            dispatch(path(objTable.name));
+
+        }
+
+
+    }
+
+    const handleAddMenu = (objFood: any, idTable: number) => {
+        const menu = { //a new food is added into list menu 
+            id: objFood?.id,
+            name: objFood?.name,
+            count: 1,
+            price: objFood?.price,
+            discount: 20,
+            total: objFood?.price,
+        }
+        let arrMenu: any = [];
+        if (orders) {    // Get list menu of the table 
+            arrMenu = orders.filter((e) => e.id === idTable)
+            arrMenu = arrMenu[0].menu
+
+        }
+        const isHadFood = arrMenu?.some((e: any) => e.id === objFood?.id);
+        let arrFood: food[] = [];
+        console.log("have had food", isHadFood)
+        console.log("list menu", arrMenu)
+        if (isHadFood) {
+            arrMenu?.map((e: any) => {   // find a food have had in list menu 
+                if (e.id === objFood?.id) {  // if it have had in menu, sum total and count
+                    let count = e.count + 1;
+                    let total = e.total * count;
+                    const item = { ...e, total: total, count: count }
+                    console.log("update count food", item)
+                    arrFood.push(item);
+                } else {
+                    arrFood.push(e);            // else keep it real
+                }
+            });
+        } else {
+            console.log("not have food");
+            arrFood = [...arrMenu, menu]
+        }
+        setOrders(
+            orders.map((e) => e.id === idTable ? { ...e, menu: arrFood } : e)
+        );
+    }
 
     return (
         <>
-            <Layout style={{ minHeight: '100vh' }}>
-                <Sider collapsible collapsed={collapsed} onCollapse={() => { onCollapse() }}>
-                    <div className="logo" />
-                    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-                        <Menu.Item key="1" icon={<PieChartOutlined />}>
-                            Option 1
-            </Menu.Item>
-                        <Menu.Item key="2" icon={<DesktopOutlined />}>
-                            Option 2
-            </Menu.Item>
-                        <SubMenu key="sub1" icon={<UserOutlined />} title="User">
-                            <Menu.Item key="3">Tom</Menu.Item>
-                            <Menu.Item key="4">Bill</Menu.Item>
-                            <Menu.Item key="5">Alex</Menu.Item>
-                        </SubMenu>
-                        <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
-                            <Menu.Item key="6">Team 1</Menu.Item>
-                            <Menu.Item key="8">Team 2</Menu.Item>
-                        </SubMenu>
-                        <Menu.Item key="9" icon={<FileOutlined />}>
-                            Files
-            </Menu.Item>
-                    </Menu>
-                </Sider>
-                <Layout className="site-layout">
-                    <Header className="site-layout-background header_home_page" >Header</Header>
-                    <Content className="content">
-                        <Breadcrumb className="breadcrumb_title">
-                            <Breadcrumb.Item>Map</Breadcrumb.Item>
-                        </Breadcrumb>
-                        <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-                            <Row >
-                                <Col className="list_table" span={4}><div className="table"><h4>table 1</h4></div></Col>
-                                <Col className="list_table" span={4}><div className="table"><h4>table 2</h4></div></Col>
-                                <Col className="list_table" span={4}><div className="table"><h4>table 3</h4></div></Col>
-                                <Col className="list_table" span={4}><div className="table"><h4>table 4</h4></div></Col>
-                                <Col className="list_table" span={4}><div className="table"><h4>table 4</h4></div></Col>
-                                <Col className="list_table" span={4}><div className="table"><h4>table 4</h4></div></Col>
-                                <Col className="list_table" span={4}><div className="table"><h4>table 4</h4></div></Col>
-                                <Col className="list_table" span={4}><div className="table"><h4>table 4</h4></div></Col>
-                                <Col className="list_table" span={4}><div className="table"><h4>table 4</h4></div></Col>
-                            </Row>
-
-                        </div>
-                    </Content>
-                    <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-                </Layout>
-            </Layout>
+            {isDetail ? <TableDetail order={data()} handleAddMenu={handleAddMenu} onClose={setIsDetail} /> : <ListTable handleSelectTable={handleSelectTable} />}
         </>
     );
 };

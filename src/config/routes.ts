@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import IRoute from '../interfaces/route';
+
 const Home = lazy(() => import("../views/Home/Home"));
 const Main = lazy(() => import("../layouts/Main/Main"));
 
@@ -12,11 +13,11 @@ const routes: IRoute[] =[
         name: "Home Page"
     },
     // {
-    //     path : "/about",
-    //     component: About,
+    //     path : "/detail-table",
+    //     component: TableDetail,
     //     layout: Main,
     //     exact: true,
-    //     name: "About Page"
+    //     name: "Detail Table Page"
     // }
 ];
 
