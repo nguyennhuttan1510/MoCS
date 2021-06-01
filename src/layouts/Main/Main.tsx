@@ -57,7 +57,7 @@ const Main: React.FC = (props: {
                     <Content className="content">
                         <Breadcrumb className="breadcrumb_title">
                             <Breadcrumb.Item>Map</Breadcrumb.Item>
-                            <Breadcrumb.Item>{dashboard.path}</Breadcrumb.Item>
+                            <Breadcrumb.Item>{dashboard.table ? dashboard.table.name : "default table"}</Breadcrumb.Item>
 
                         </Breadcrumb>
                         <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>

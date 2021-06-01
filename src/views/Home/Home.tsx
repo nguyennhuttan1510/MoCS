@@ -1,68 +1,40 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import '../../style/_Home.scss'
 import TableDetail from './components/TableDetail';
 import ListTable from './components/ListTable';
 import { Order } from '../../util/DataTable';
 import { food, order } from '../../interfaces/Home';
-import { useDispatch } from 'react-redux';
-import { path } from 'Reduces/dashboard'
+import { useDispatch, useSelector } from 'react-redux';
+import { addMenuOfTable, addTable, table, removeMenuOfTable } from 'Reduces/dashboard'
 
 
 
 const Home: React.FC = props => {
+    const order: order[] = useSelector((state: any) => state.dashboard.data);
 
-    const order = [
-        {
-            id: 1,
-            name: "Table 1",
-            menu: [
-                {
-                    id: 1,
-                    name: "mì xào",
-                    count: 2,
-                    price: 40000,
-                    discount: 20,
-                    total: 80000,
-                },
-                {
-                    id: 1,
-                    name: "mì xào",
-                    count: 2,
-                    price: 40000,
-                    discount: 10,
-                    total: 80000,
-                },
-                {
-                    id: 1,
-                    name: "mì xào",
-                    count: 2,
-                    price: 40000,
-                    discount: 20,
-                    total: 80000,
-                },
-                {
-                    id: 1,
-                    name: "mì xào",
-                    count: 2,
-                    price: 40000,
-                    discount: 20,
-                    total: 80000,
-                },
-            ],
-            total_cost: 10000
-        }
-    ]
-        ;
+    console.log(order);
 
     const [isDetail, setIsDetail] = useState<boolean>(false);
     const [orders, setOrders] = useState<Array<order>>(order);
     const [idTable, setIdTable] = useState<number>();
     const dispatch = useDispatch();
 
-    const data = () => {
+    useEffect(() => {
+        setOrders(order);
+        console.log("render home")
+    }, [order]);
+
+    const tableDetail = () => {
+        if (!orders) return
         const result = orders.filter((item) => item.id === idTable);
         return result[0];
+
+    }
+
+    const onClose = (isClose: boolean) => {
+        setIsDetail(isClose)
+        dispatch(table(false));
 
     }
 
@@ -78,15 +50,24 @@ const Home: React.FC = props => {
             console.log(result)
             console.log("into handleSelectTable");
             if (result.length === 0) {
-                setOrders([...orders, initObjTable])
+                // setOrders([...orders, initObjTable])
+                const action = addTable(initObjTable);
+                dispatch(action);
             }
             setIdTable(objTable.id)
             setIsDetail(!isDetail);
-            dispatch(path(objTable.name));
+            dispatch(table(objTable));
 
         }
 
 
+    }
+
+    const handleRemoveMenu = (objFood: any, idTable: number) => {
+        console.log(idTable)
+        const payload = { id: idTable, food: objFood }
+        const action = removeMenuOfTable(payload)
+        dispatch(action);
     }
 
     const handleAddMenu = (objFood: any, idTable: number) => {
@@ -98,6 +79,7 @@ const Home: React.FC = props => {
             discount: 20,
             total: objFood?.price,
         }
+        console.log(menu);
         let arrMenu: any = [];
         if (orders) {    // Get list menu of the table 
             arrMenu = orders.filter((e) => e.id === idTable)
@@ -112,7 +94,7 @@ const Home: React.FC = props => {
             arrMenu?.map((e: any) => {   // find a food have had in list menu 
                 if (e.id === objFood?.id) {  // if it have had in menu, sum total and count
                     let count = e.count + 1;
-                    let total = e.total * count;
+                    let total = e.price * count;
                     const item = { ...e, total: total, count: count }
                     console.log("update count food", item)
                     arrFood.push(item);
@@ -124,14 +106,21 @@ const Home: React.FC = props => {
             console.log("not have food");
             arrFood = [...arrMenu, menu]
         }
-        setOrders(
-            orders.map((e) => e.id === idTable ? { ...e, menu: arrFood } : e)
-        );
+
+
+        // setOrders(
+        //     orders.map((e) => e.id === idTable ? { ...e, menu: arrFood } : e)
+        // );
+        const payload = {
+            id: idTable, food: arrFood
+        }
+        const action = addMenuOfTable(payload)
+        dispatch(action);
     }
 
     return (
         <>
-            {isDetail ? <TableDetail order={data()} handleAddMenu={handleAddMenu} onClose={setIsDetail} /> : <ListTable handleSelectTable={handleSelectTable} />}
+            {isDetail ? <TableDetail order={tableDetail()} handleAddMenu={handleAddMenu} handleRemoveMenu={handleRemoveMenu} onClose={onClose} /> : <ListTable handleSelectTable={handleSelectTable} />}
         </>
     );
 };

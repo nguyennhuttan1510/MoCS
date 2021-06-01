@@ -21,5 +21,7 @@ export interface order {
 export interface ITableDetail {
     order?: order,
     handleAddMenu: Function,
+    handleRemoveMenu: Function,
     onClose: Function
+
 }
