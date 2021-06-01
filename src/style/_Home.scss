@@ -7,6 +7,8 @@ $fontWeight: 700;
       font-weight: $fontWeight;
     }
     .site-layout-background {
+      padding: 24px;
+      min-height: 360px;
       .list_table {
         margin-bottom: 30px;
         .table {
@@ -31,12 +33,67 @@ $fontWeight: 700;
   .close_table {
     position: absolute;
     border-bottom-left-radius: 12px;
-    border-color: #fd3434;
     top: 64px;
     padding: 5px 20px;
     background-color: #fd3434;
     right: 0px;
     color: white;
     font-weight: 800;
+  }
+}
+.wrap_table_detail {
+  position: relative;
+  .total_cost {
+    font-size: 1.8vw;
+    font-weight: 700;
+    position: absolute;
+    right: 0%;
+    display: flex;
+    width: 18vw;
+    height: 35px;
+    color: #ff0303de;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+  }
+}
+.total_cost {
+  font-size: 2.5vw;
+  font-weight: 700;
+  right: 0%;
+  display: flex;
+  width: 18vw;
+  height: 35px;
+  color: #ff0303de;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.ant-tabs-tab {
+  &.ant-tabs-tab-active {
+    &:nth-child(3) {
+      color: #1890ff;
+    }
+  }
+  &:nth-child(3) {
+    border: 1px solid;
+    padding: 0px 15px;
+    border-radius: 5px;
+  }
+  .ant-tabs-tab-btn {
+    font-weight: 600;
+    font-family: sans-serif;
+  }
+}
+.ant-btn {
+  &.delete {
+    color: #ff4949;
+    background: #fff;
+    border-color: #ff4949;
+    font-weight: 600;
+    &:hover {
+      color: #ff0000;
+      background: #fff;
+      border-color: #ff0000;
+    }
   }
 }

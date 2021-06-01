@@ -96,47 +96,47 @@ export const MenuFood = [
 
 export const MenuDrink = [
     {
-        id: 1,
+        id: 101,
         name: "Drink 1",
         price: 1000,
     },
     {
-        id: 2,
+        id: 102,
         name: "Drink 2",
         price: 5000,
     },
     {
-        id: 3,
+        id: 103,
         name: "Drink 3",
         price: 5000,
     },
     {
-        id: 4,
+        id: 104,
         name: "Drink 4",
         price: 5000,
     },
     {
-        id: 5,
+        id: 105,
         name: "Drink 5",
         price: 5000,
     },
     {
-        id: 6,
+        id: 106,
         name: "Drink 6",
         price: 6000,
     },
     {
-        id: 7,
+        id: 107,
         name: "Drink 7",
         price: 7000,
     },
     {
-        id: 8,
+        id: 108,
         name: "Drink 8",
         price: 8000,
     },
     {
-        id: 9,
+        id: 109,
         name: "Drink 9",
         price: 9000,
     },
