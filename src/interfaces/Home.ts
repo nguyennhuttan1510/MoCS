@@ -1,5 +1,6 @@
 export interface IListTable {
     handleSelectTable: Function,
+    listTable: order[]
 }
 
 export interface food  {

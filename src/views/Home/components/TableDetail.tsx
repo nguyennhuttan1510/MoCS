@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col, Tabs, Table, Button, Space } from 'antd';
+import { Row, Col, Tabs, Table, Button, Space, Badge } from 'antd';
 import { MenuFood, MenuDrink } from '../../../util/Table';
 import { ITableDetail } from '../../../interfaces/Home';
 import ModalHome from "components/Modal/Modal"
@@ -137,7 +137,6 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
             setContent((prev: any) => { return { ...prev, cash: cash } });
         }
     }
-    console.log(order?.id);
     const handleClickOK = () => {
         start();
         setIsChange(false)
@@ -154,6 +153,16 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
 
     }
 
+    const handleBadgeFood = useCallback((item: any) => {
+        if (!data) return
+        const isBadge = data.find((e: any) => e.id === item.id)
+        console.log(isBadge)
+        if (!isBadge || isBadge === undefined) return
+        console.log(isBadge.count)
+        return isBadge.count
+
+    }, [data])
+
     return (
         <>
             <ModalHome content={content} isVisible={isVisible} handleSetIsVisible={handleSetIsVisible} handleChangeContent={handleChangeContent} handleClickOK={handleClickOK} />
@@ -168,10 +177,15 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
                         <Row>
                             {MenuFood.map((item, key) => (
                                 <Col key={key} className="list_table" span={6}>
-                                    <div className="table" onClick={() => { handleAddMenu(item, order?.id) }} >
-                                        <h4>{item.name}</h4>
-                                    </div>
+                                    <Badge count={handleBadgeFood(item)}>
+                                        <div className="table noselect" onClick={() => { handleAddMenu(item, order?.id) }} >
+                                            <h4>{item.name}</h4>
+                                        </div>
+                                    </Badge>
+
+
                                 </Col>
+
                             ))}
                         </Row>
 
@@ -180,9 +194,11 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
                         <Row>
                             {MenuDrink.map((item, key) => (
                                 <Col key={key} className="list_table" span={6}>
-                                    <div className="table" onClick={() => { handleAddMenu(item, order?.id) }}>
-                                        <h4>{item.name}</h4>
-                                    </div>
+                                    <Badge count={handleBadgeFood(item)}>
+                                        <div className="table noselect" onClick={() => { handleAddMenu(item, order?.id) }}>
+                                            <h4>{item.name}</h4>
+                                        </div>
+                                    </Badge>
                                 </Col>
                             ))}
                         </Row>

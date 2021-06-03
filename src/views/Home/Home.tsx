@@ -120,7 +120,7 @@ const Home: React.FC = props => {
 
     return (
         <>
-            {isDetail ? <TableDetail order={tableDetail()} handleAddMenu={handleAddMenu} handleRemoveMenu={handleRemoveMenu} onClose={onClose} /> : <ListTable handleSelectTable={handleSelectTable} />}
+            {isDetail ? <TableDetail order={tableDetail()} handleAddMenu={handleAddMenu} handleRemoveMenu={handleRemoveMenu} onClose={onClose} /> : <ListTable listTable={orders} handleSelectTable={handleSelectTable} />}
         </>
     );
 };

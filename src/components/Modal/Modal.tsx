@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'antd';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input } from 'antd';
 
 export interface Imodal {
     content?: object,
@@ -34,7 +34,6 @@ const ModalHome: React.FunctionComponent<Imodal> = (props: any) => {
     };
 
 
-
     return (
         <>
             <Modal
@@ -53,7 +52,7 @@ const ModalHome: React.FunctionComponent<Imodal> = (props: any) => {
                         name="username"
                         rules={[{ required: true, message: 'Please input cost!' }]}
                     >
-                        <Input onChange={(e) => { handleChangeContent(e.target.value) }} />
+                        <Input maxLength={9} type="number" autoComplete="off" onChange={(e) => { handleChangeContent(e.target.value) }} />
                     </Form.Item>
                     <div className="total_cost" style={{ marginTop: "20px" }} >{new Intl.NumberFormat().format(content?.cash)}</div>
 
