@@ -8,6 +8,9 @@ import { useCountUp } from 'react-countup';
 import { useDispatch, useSelector } from 'react-redux';
 import { payBill } from 'Reduces/dashboard';
 import { defaultTitle } from 'config/_INT'
+import { handlePayBillTable } from 'util/socket/action';
+
+
 var get = require('lodash/get');
 var sum = require('lodash/sum');
 
@@ -142,9 +145,11 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
         setIsChange(false)
 
         if (order) {
-            const action = payBill(order.id);
+            // const action = payBill(order.id);
+            // dispatch(action)
 
-            dispatch(action)
+            handlePayBillTable(order.id)
+
             setTimeout(() => {
                 onClose(false)
             }, 2000);

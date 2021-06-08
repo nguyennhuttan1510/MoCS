@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { socket } from 'config/connectSocket'
+import { useDispatch } from 'react-redux'
 
 export interface Istate {
     table: object,
@@ -14,17 +16,25 @@ const state: Istate = {
 }
 
 const dashboard = createSlice({
-    name: 'test',
+
+    name: 'table',
     initialState: state,
     reducers: {
         table: (state, action) => {
             const table = action.payload;
+            console.log("currentT: ", table)
             if (table) {
                 const currentTable = state.data.filter(e => e.id === table.id)
+                console.log(currentTable);
                 if (currentTable.length > 0) {
+
                     state.table = currentTable[0]
                     return
+                } else {
+                    state.table = table
+                    return
                 }
+
             }
             state.table = {}
         },
@@ -39,7 +49,8 @@ const dashboard = createSlice({
             tables.splice(index, 1)
         },
 
-        addTable: (state, action) => void (state.data = [...state.data, action.payload]),
+        // addTable: (state, action) => void (state.data = [...state.data, action.payload]),
+        addTable: (state, action) => void (state.data = action.payload),
 
         addMenuOfTable: (state, action) => {
             const { id, food } = action.payload //id = id table, food = food is list food in table 
@@ -58,3 +69,5 @@ const dashboard = createSlice({
 export const { table, payBill, addTable, addMenuOfTable, removeMenuOfTable } = dashboard.actions
 
 export default dashboard.reducer
+
+
