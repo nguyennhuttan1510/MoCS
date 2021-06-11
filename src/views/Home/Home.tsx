@@ -12,21 +12,29 @@ import { food, order } from '../../interfaces/Home';
 import { addMenuOfTable, addTable, table, removeMenuOfTable } from 'Reduces/dashboard'
 
 import { handleAddTable, handleAddMenuTable, handleRemoveFood } from 'util/socket/action';
+import axios from 'axios';
 
 
 const Home: React.FC = props => {
     const state = useSelector((state: any) => state.dashboard);
     const tableCurrent = state.table
-    const order: order[] = state.data
+    const tables: order[] = state.data
 
     const [isDetail, setIsDetail] = useState<boolean>(false);
-    const [orders, setOrders] = useState<Array<order>>(order);
+    const [orders, setOrders] = useState<Array<order>>(tables);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        setOrders(order);
-        console.log("render home")
-    }, [order]);
+        setOrders(tables);
+    }, [tables]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await axios.get("http://localhost:5000/staff/");
+            console.log(result.data);
+        };
+        fetchData();
+    }, [])
 
     const handleGetTableDetail = () => {
         if (!orders) return
