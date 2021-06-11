@@ -17,3 +17,7 @@ export const handleRemoveFood = (payload: object) => {
     socket.emit("remove-menu", payload)
 }
 
+export const handlePushMenuToChef = (payload: object) => {
+    socket.emit("push-to-chef", payload)
+}
+

@@ -50,6 +50,11 @@ $fontWeight: 700;
 }
 .wrap_table_detail {
   position: relative;
+  .footer-action {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 20px;
+  }
   .total_cost {
     font-size: 1.8vw;
     font-weight: 700;

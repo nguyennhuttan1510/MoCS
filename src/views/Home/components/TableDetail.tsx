@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { CloudUploadOutlined } from '@ant-design/icons';
+
 import { Row, Col, Tabs, Table, Button, Space, Badge } from 'antd';
 import { MenuFood, MenuDrink } from '../../../util/Table';
 import { ITableDetail } from '../../../interfaces/Home';
@@ -8,7 +10,7 @@ import { useCountUp } from 'react-countup';
 import { useDispatch, useSelector } from 'react-redux';
 import { payBill } from 'Reduces/dashboard';
 import { defaultTitle } from 'config/_INT'
-import { handlePayBillTable } from 'util/socket/action';
+import { handlePayBillTable, handlePushMenuToChef } from 'util/socket/action';
 
 
 var get = require('lodash/get');
@@ -31,7 +33,6 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
     const { order, handleAddMenu, handleRemoveMenu, onClose } = props;
     const dispatch = useDispatch();
     const table = useSelector((state: Iredux) => state.dashboard.table);
-    console.log(table.id)
     const { tableDetail } = defaultTitle;
 
     const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -97,8 +98,6 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
 
     // ============================== END CONFIG COL TABLE 
 
-    console.log("render")
-
 
     const handleSetCountUp = () => {
         let start = content.cost.cost;
@@ -108,15 +107,12 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
     const { countUp, start } = useCountUp(handleSetCountUp());
 
     useEffect(() => {
-        //TODO:DUMMY-COST
         function sumMenu() {
-            // const cost = Math.round(Math.random() * (max - min) + min)
             const cost = sum(order?.menu.map(e => e.total))
             console.log(cost)
             const format = new Intl.NumberFormat().format(cost)
             return { cost: cost, format: format, title: "Payment" }
         }
-        console.log("render table")
         const cost = sumMenu();
         setContent({ cost, cash: 0 });
     }, [order]);
@@ -133,7 +129,6 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
     }
 
     const handleChangeContent = (value: number) => {
-        console.log(value);
         let cash = 0;
         if (content) {
             cash = value - content.cost.cost
@@ -209,7 +204,10 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
                         </Row>
                     </TabPane>
                     <TabPane tab={tableDetail.tab.bill} className="tab_table bold" key="3">
-                        <Table columns={columns} dataSource={data} onChange={onChange} />
+                        <Table columns={columns} dataSource={data} onChange={onChange} pagination={false} />
+                        <div className="footer-action"><Button type="primary" shape="round" icon={<CloudUploadOutlined />} size={"large"} onClick={() => { handlePushMenuToChef(table) }} >
+                            Push
+        </Button></div>
                     </TabPane>
                 </Tabs>
 
