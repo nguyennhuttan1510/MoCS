@@ -11,6 +11,7 @@ $fontWeight: 700;
       min-height: 360px;
       .list_table {
         margin-bottom: 30px;
+
         .table {
           display: flex;
           justify-content: center;
@@ -20,6 +21,12 @@ $fontWeight: 700;
           background-color: lightseagreen;
           color: black;
           cursor: pointer;
+          &.active {
+            background-color: rgb(0, 186, 0);
+          }
+          &.processing {
+            background-color: #0047ba;
+          }
         }
       }
     }
@@ -43,6 +50,11 @@ $fontWeight: 700;
 }
 .wrap_table_detail {
   position: relative;
+  .footer-action {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 20px;
+  }
   .total_cost {
     font-size: 1.8vw;
     font-weight: 700;
@@ -96,4 +108,17 @@ $fontWeight: 700;
       border-color: #ff0000;
     }
   }
+}
+
+.ant-badge-count {
+  box-shadow: 0 0 0 3px #f0f2f5 !important;
+}
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }

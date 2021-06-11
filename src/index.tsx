@@ -5,11 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from './store'
 import { Provider } from 'react-redux'
+import WebSocket from 'components/WebSocket/WebSocket';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <WebSocket>
+        <App />
+      </WebSocket>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

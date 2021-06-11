@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col, Tabs, Table, Button, Space } from 'antd';
+import { CloudUploadOutlined } from '@ant-design/icons';
+
+import { Row, Col, Tabs, Table, Button, Space, Badge } from 'antd';
 import { MenuFood, MenuDrink } from '../../../util/Table';
 import { ITableDetail } from '../../../interfaces/Home';
 import ModalHome from "components/Modal/Modal"
@@ -8,6 +10,9 @@ import { useCountUp } from 'react-countup';
 import { useDispatch, useSelector } from 'react-redux';
 import { payBill } from 'Reduces/dashboard';
 import { defaultTitle } from 'config/_INT'
+import { handlePayBillTable, handlePushMenuToChef } from 'util/socket/action';
+
+
 var get = require('lodash/get');
 var sum = require('lodash/sum');
 
@@ -28,7 +33,6 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
     const { order, handleAddMenu, handleRemoveMenu, onClose } = props;
     const dispatch = useDispatch();
     const table = useSelector((state: Iredux) => state.dashboard.table);
-    console.log(table.id)
     const { tableDetail } = defaultTitle;
 
     const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -94,8 +98,6 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
 
     // ============================== END CONFIG COL TABLE 
 
-    console.log("render")
-
 
     const handleSetCountUp = () => {
         let start = content.cost.cost;
@@ -105,15 +107,12 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
     const { countUp, start } = useCountUp(handleSetCountUp());
 
     useEffect(() => {
-        //TODO:DUMMY-COST
         function sumMenu() {
-            // const cost = Math.round(Math.random() * (max - min) + min)
             const cost = sum(order?.menu.map(e => e.total))
             console.log(cost)
             const format = new Intl.NumberFormat().format(cost)
             return { cost: cost, format: format, title: "Payment" }
         }
-        console.log("render table")
         const cost = sumMenu();
         setContent({ cost, cash: 0 });
     }, [order]);
@@ -130,22 +129,22 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
     }
 
     const handleChangeContent = (value: number) => {
-        console.log(value);
         let cash = 0;
         if (content) {
             cash = value - content.cost.cost
             setContent((prev: any) => { return { ...prev, cash: cash } });
         }
     }
-    console.log(order?.id);
     const handleClickOK = () => {
         start();
         setIsChange(false)
 
         if (order) {
-            const action = payBill(order.id);
+            // const action = payBill(order.id);
+            // dispatch(action)
 
-            dispatch(action)
+            handlePayBillTable(order.id)
+
             setTimeout(() => {
                 onClose(false)
             }, 2000);
@@ -153,6 +152,16 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
 
 
     }
+
+    const handleBadgeFood = useCallback((item: any) => {
+        if (!data) return
+        const isBadge = data.find((e: any) => e.id === item.id)
+        console.log(isBadge)
+        if (!isBadge || isBadge === undefined) return
+        console.log(isBadge.count)
+        return isBadge.count
+
+    }, [data])
 
     return (
         <>
@@ -168,10 +177,15 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
                         <Row>
                             {MenuFood.map((item, key) => (
                                 <Col key={key} className="list_table" span={6}>
-                                    <div className="table" onClick={() => { handleAddMenu(item, order?.id) }} >
-                                        <h4>{item.name}</h4>
-                                    </div>
+                                    <Badge count={handleBadgeFood(item)}>
+                                        <div className="table noselect" onClick={() => { handleAddMenu(item, order?.id) }} >
+                                            <h4>{item.name}</h4>
+                                        </div>
+                                    </Badge>
+
+
                                 </Col>
+
                             ))}
                         </Row>
 
@@ -180,15 +194,20 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
                         <Row>
                             {MenuDrink.map((item, key) => (
                                 <Col key={key} className="list_table" span={6}>
-                                    <div className="table" onClick={() => { handleAddMenu(item, order?.id) }}>
-                                        <h4>{item.name}</h4>
-                                    </div>
+                                    <Badge count={handleBadgeFood(item)}>
+                                        <div className="table noselect" onClick={() => { handleAddMenu(item, order?.id) }}>
+                                            <h4>{item.name}</h4>
+                                        </div>
+                                    </Badge>
                                 </Col>
                             ))}
                         </Row>
                     </TabPane>
                     <TabPane tab={tableDetail.tab.bill} className="tab_table bold" key="3">
-                        <Table columns={columns} dataSource={data} onChange={onChange} />
+                        <Table columns={columns} dataSource={data} onChange={onChange} pagination={false} />
+                        <div className="footer-action"><Button type="primary" shape="round" icon={<CloudUploadOutlined />} size={"large"} onClick={() => { handlePushMenuToChef(table) }} >
+                            Push
+        </Button></div>
                     </TabPane>
                 </Tabs>
 
