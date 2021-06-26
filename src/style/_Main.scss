@@ -1,3 +1,32 @@
+$fontWeight: 700;
 .hide-icon i {
   display: none;
+}
+
+.site-layout {
+  .header-left {
+    width: fit-content;
+    display: inline-block;
+  }
+
+  .header-right {
+    width: fit-content;
+    display: inline-block;
+    float: right;
+    padding: 0px 15px;
+    .icon-header-right {
+      font-size: 18px;
+    }
+    .username-header {
+      padding-right: 15px;
+      font-size: initial;
+      font-weight: 300;
+    }
+  }
+  .header_home_page {
+    color: white;
+    padding: 0px 0px 0px 50px;
+    font-weight: $fontWeight;
+    font-size: 24px;
+  }
 }

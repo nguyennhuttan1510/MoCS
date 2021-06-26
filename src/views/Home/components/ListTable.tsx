@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Menu, Breadcrumb, Row, Col } from 'antd';
-import { Table } from '../../../util/Table';
-import { IListTable } from '../../../interfaces/Home';
+import { Row, Col, Badge } from 'antd';
+import { Table } from 'config/configTable';
+import { IListTable } from 'interfaces/Home';
 
 
 
@@ -11,9 +11,7 @@ const ListTable: React.FunctionComponent<IListTable> = (props) => {
     const isActiveTable =
         (item: any) => {
             const isNewTbale = listTable.some(e => e.id === item.id)
-            const isOrderedTbale = listTable.some(e => e.id === item.id && e.menu.length > 0)
-            console.log("is new", isNewTbale)
-            console.log("is process", isOrderedTbale)
+            const isOrderedTbale = listTable.some(e => e.id === item.id && e.isMakeFood)
             if (isNewTbale && isOrderedTbale) {
                 return "processing"
             }
@@ -21,60 +19,24 @@ const ListTable: React.FunctionComponent<IListTable> = (props) => {
                 return "active"
             }
         }
+
+    const foodStatusOrder = (item: any) => {
+        const table = listTable.find(e => e.id === item.id)
+        if (!table) return;
+        const countFoodHaveDone = table.menu.filter(e => e.status !== "Done");
+        return countFoodHaveDone.length;
+    }
     return (
         <>
             <Row>
                 {Table.map((item, key) =>
                     <Col key={key} className="list_table" span={4}>
-                        <div className={`table noselect ${isActiveTable(item)}`} onClick={() => { handleSelectTable(item) }}>
-                            <h4>{item.name}</h4>
-                        </div>
+                        <Badge count={foodStatusOrder(item)}>
+                            <div className={`table noselect ${isActiveTable(item)}`} onClick={() => { handleSelectTable(item) }}>
+                                <h4>{item.name}</h4>
+                            </div>
+                        </Badge>
                     </Col>)}
-                {/* <Col className="list_table" span={4}>
-                    <div className="table" >
-                        <h4>table 1</h4>
-                    </div>
-                </Col>
-                <Col className="list_table" span={4}>
-                    <div className="table">
-                        <h4>table 2</h4>
-                    </div>
-                </Col>
-                <Col className="list_table" span={4}>
-                    <div className="table">
-                        <h4>table 3</h4>
-                    </div>
-                </Col>
-                <Col className="list_table" span={4}>
-                    <div className="table">
-                        <h4>table 4</h4>
-                    </div>
-                </Col>
-                <Col className="list_table" span={4}>
-                    <div className="table">
-                        <h4>table 4</h4>
-                    </div>
-                </Col>
-                <Col className="list_table" span={4}>
-                    <div className="table">
-                        <h4>table 4</h4>
-                    </div>
-                </Col>
-                <Col className="list_table" span={4}>
-                    <div className="table">
-                        <h4>table 4</h4>
-                    </div>
-                </Col>
-                <Col className="list_table" span={4}>
-                    <div className="table">
-                        <h4>table 4</h4>
-                    </div>
-                </Col>
-                <Col className="list_table" span={4}>
-                    <div className="table">
-                        <h4>table 4</h4>
-                    </div>
-                </Col> */}
             </Row>
         </>
     );

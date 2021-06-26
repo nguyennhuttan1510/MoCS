@@ -6,7 +6,7 @@ import Routes from './Routes';
 import { BrowserRouter as Router, } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
-import { socket } from 'config/connectSocket'
+import { socket } from 'components/WebSocket/connectSocket'
 
 const browserHistory = createBrowserHistory();
 

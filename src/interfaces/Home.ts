@@ -10,9 +10,12 @@ export interface food  {
     price: number,
     discount: number,
     total: number,
+    chef: any,
+    status: "Order"| "Pending" | "Done"
 }
 
 export interface order {
+    isMakeFood?: boolean,
     id: number,
     name: string,
     menu: Array<food>,
@@ -25,4 +28,8 @@ export interface ITableDetail {
     handleRemoveMenu: Function,
     onClose: Function
 
+}
+
+export interface IChefDetail {
+    table?: order,
 }

@@ -1,3 +1,4 @@
+// ========================================STAFFDETAIL=================================
 $fontWeight: 700;
 .site-layout {
   .content {
@@ -30,12 +31,6 @@ $fontWeight: 700;
         }
       }
     }
-  }
-  .header_home_page {
-    color: white;
-    padding: 0px 0px 0px 50px;
-    font-weight: $fontWeight;
-    font-size: 24px;
   }
   .close_table {
     position: absolute;
@@ -110,6 +105,15 @@ $fontWeight: 700;
   }
 }
 
+.noti-table-bill {
+  &.food-done {
+    color: #30ff4c;
+  }
+  color: #ff3030;
+  font-size: 14px;
+  font-weight: 600;
+}
+
 .ant-badge-count {
   box-shadow: 0 0 0 3px #f0f2f5 !important;
 }
@@ -120,5 +124,36 @@ $fontWeight: 700;
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome and Opera */
+  supported by Chrome and Opera */
+}
+
+// =====================================CHEFDETAIL====================================
+
+.icon-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: chartreuse;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+
+#detail-chef {
+  .ant-badge {
+    width: 100%;
+    .cardfood {
+      width: 100%;
+      &.pending {
+        .ant-card-head {
+          background-color: rgb(186, 186, 186);
+        }
+      }
+      &.done {
+        .ant-card-head {
+          background-color: rgb(77, 230, 77);
+        }
+      }
+    }
+  }
 }

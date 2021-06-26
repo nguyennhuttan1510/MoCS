@@ -1,29 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export interface Istate {
-    staff: object,
-    data: Array<any>
+    profile: object,
 }
 
 
 const state: Istate = {
-    staff: {},
-    data: []
+    profile: {},
 
 }
 
 const staffs = createSlice({
 
-    name: 'staffs',
+    name: 'profile',
     initialState: state,
     reducers: {
         // addStaff: (state, action) => { console.log(action.payload); state.data = action.payload },
-        addStaff: (state, action) => void (state.data = action.payload),
+        getProfile: (state, action) => void (state.profile = action.payload),
 
 
     },
 })
-export const { addStaff } = staffs.actions
+export const { getProfile } = staffs.actions
 
 export default staffs.reducer
 

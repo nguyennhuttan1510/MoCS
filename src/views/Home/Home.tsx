@@ -4,37 +4,36 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import '../../style/_Home.scss'
 
-import TableDetail from './components/TableDetail';
-import ListTable from './components/ListTable';
+import TableDetail from 'views/Home/components/TableDetail';
+import ListTable from 'views/Home/components/ListTable';
+import ChefDetail from 'views/Home/components/ChefDetail';
 
 import { food, order } from '../../interfaces/Home';
 
-import { addMenuOfTable, addTable, table, removeMenuOfTable } from 'Reduces/dashboard'
+import { addMenuOfTable, addTable, table, setIsDetail, removeMenuOfTable } from 'Reduces/dashboard'
 
-import { handleAddTable, handleAddMenuTable, handleRemoveFood } from 'util/socket/action';
+import { handleAddTable, handleAddMenuTable, handleRemoveFood } from 'util/socket/actionHome';
 import axios from 'axios';
+// import { useHistory } from 'react-router-dom';
 
 
 const Home: React.FC = props => {
+    // const history = useHistory();
+
     const state = useSelector((state: any) => state.dashboard);
+    const { isRedirectDetail } = state;
+    const profile = useSelector((state: any) => state.staffs.profile);
     const tableCurrent = state.table
     const tables: order[] = state.data
 
-    const [isDetail, setIsDetail] = useState<boolean>(false);
+
+    // const [isDetail, setIsDetail] = useState<boolean>(false);
     const [orders, setOrders] = useState<Array<order>>(tables);
     const dispatch = useDispatch();
 
     useEffect(() => {
         setOrders(tables);
     }, [tables]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await axios.get("http://localhost:5000/staff/");
-            console.log(result.data);
-        };
-        fetchData();
-    }, [])
 
     const handleGetTableDetail = () => {
         if (!orders) return
@@ -43,35 +42,37 @@ const Home: React.FC = props => {
     }
 
     const onClose = (isClose: boolean) => {
-        setIsDetail(isClose)
+        dispatch(setIsDetail(false))
         dispatch(table(false));
     }
 
     const handleSelectTable = (objTable: order) => {
-        if (objTable?.id) {
-            const initObjTable = {
-                id: objTable.id,
-                name: objTable.name,
-                menu: [],
-                total_cost: 0
+        if (profile.position === "Staff") {               // IF POSITION IS STAFF => TABLE IS CREATED
+            if (objTable?.id) {
+                const initObjTable = {
+                    id: objTable.id,
+                    name: objTable.name,
+                    menu: [],
+                    total_cost: 0
+                }
+                const result = orders.filter((item) => item.id === objTable.id);
+                console.log(result)
+                console.log("into handleSelectTable");
+                if (result.length === 0) {
+                    handleAddTable(initObjTable)
+                }
+
             }
-            const result = orders.filter((item) => item.id === objTable.id);
-            console.log(result)
-            console.log("into handleSelectTable");
-            if (result.length === 0) {
-                handleAddTable(initObjTable)
-            }
-            setIsDetail(!isDetail);
-            dispatch(table(objTable));
         }
+        dispatch(setIsDetail(true));
+        dispatch(table(objTable));
+
     }
 
     const handleRemoveMenu = (objFood: any, idTable: number) => {
         console.log(idTable)
         const payload = { id: idTable, food: objFood }
         handleRemoveFood(payload)
-        // const action = removeMenuOfTable(payload)
-        // dispatch(action);
     }
 
     const handleAddMenu = (objFood: any, idTable: number) => {
@@ -84,6 +85,8 @@ const Home: React.FC = props => {
             price: objFood?.price,
             discount: 20,
             total: total,
+            chef: false,
+            status: "Order"                 // Order| Pending | Done 
         }
         const payload = {
             id: idTable, food: menu
@@ -93,7 +96,7 @@ const Home: React.FC = props => {
 
     return (
         <>
-            {isDetail ? <TableDetail order={handleGetTableDetail()} handleAddMenu={handleAddMenu} handleRemoveMenu={handleRemoveMenu} onClose={onClose} /> : <ListTable listTable={orders} handleSelectTable={handleSelectTable} />}
+            {isRedirectDetail ? (profile.position === "Staff" || profile.position === "Admin" ? <TableDetail order={handleGetTableDetail()} handleAddMenu={handleAddMenu} handleRemoveMenu={handleRemoveMenu} onClose={onClose} /> : <ChefDetail table={handleGetTableDetail()} />) : <ListTable listTable={orders} handleSelectTable={handleSelectTable} />}
         </>
     );
 };

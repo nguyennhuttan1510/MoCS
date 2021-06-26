@@ -1,20 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal } from 'antd';
+import { Modal, Button } from 'antd';
 import { Form, Input } from 'antd';
 
 export interface Imodal {
-    content?: object,
+    timeout?: number,
+    data?: object,
+    contents: string,
+    className?: string,
     isVisible: boolean,
     handleSetIsVisible: Function,
-    handleChangeContent: Function,
-    handleClickOK: Function,
+    handleChangeData?: Function,
+    handleClickOK?: Function,
 }
 
 const ModalHome: React.FunctionComponent<Imodal> = (props: any) => {
 
-
-    const { content, isVisible, handleSetIsVisible, handleChangeContent, handleClickOK } = props;
+    const { contents, data, isVisible, handleSetIsVisible, handleChangeData, handleClickOK, timeout, ...rest } = props;
 
     const [confirmLoading, setConfirmLoading] = React.useState(false);
 
@@ -24,39 +26,73 @@ const ModalHome: React.FunctionComponent<Imodal> = (props: any) => {
             handleSetIsVisible();
             setConfirmLoading(false);
             handleClickOK()
-        }, 2000);
+        }, timeout);
     };
 
     const handleCancel = () => {
-        console.log('Clicked cancel button');
         handleSetIsVisible();
 
     };
 
-
+    const displayStatusButton = () => {
+        if (!data?.chef || !data?.profile) return "Ok"
+        let result = ""
+        if (data?.status === "Order") {
+            result = "OK"
+        } else if (data.profile?.name == data.chef?.name) {
+            result = "Done"
+        }
+        else {
+            result = "Recieve"
+        }
+        console.log(result)
+        return result
+        // data?.status === "Order" ? "OK" : (data.profile?.name == data.chef?.name ? "Done" : "Recieve")
+    }
     return (
         <>
             <Modal
                 title="Payment"
                 visible={isVisible}
                 onOk={handleOk}
-                confirmLoading={confirmLoading}
                 onCancel={handleCancel}
+                footer={[
+                    <Button key="back" onClick={handleCancel}>
+                        Return
+                    </Button>,
+                    <Button key="submit" type="primary" loading={confirmLoading} onClick={handleOk}>
+                        {contents === "foodOfTable" ? displayStatusButton() : "OK"}
+                        {/* {data?.status === "Order" ? "OK" : "Done"} */}
+                    </Button>,
+                ]}
             >
-                <Form
-                    name="basic"
-                    initialValues={{ remember: false }}
-                >
-                    <div className="total_cost" >{content?.cost.format}</div>
-                    <Form.Item
-                        name="username"
-                        rules={[{ required: true, message: 'Please input cost!' }]}
+                {contents === "priceBill" ? (
+                    <Form
+                        name="basic"
+                        initialValues={{ remember: false }}
                     >
-                        <Input maxLength={9} type="number" autoComplete="off" onChange={(e) => { handleChangeContent(e.target.value) }} />
-                    </Form.Item>
-                    <div className="total_cost" style={{ marginTop: "20px" }} >{new Intl.NumberFormat().format(content?.cash)}</div>
+                        <div className="total_cost" >{data?.cost.format}</div>
+                        <Form.Item
+                            name="username"
+                            rules={[{ required: true, message: 'Please input cost!' }]}
+                        >
+                            <Input maxLength={9} type="number" autoComplete="off" onChange={(e) => { handleChangeData(e.target.value) }} />
+                        </Form.Item>
+                        <div className="total_cost" style={{ marginTop: "20px", color: `${data.cash >= 0 ? "green" : "red"}` }} >{new Intl.NumberFormat().format(data?.cash)}</div>
 
-                </Form>
+                    </Form>
+                ) : (contents === "foodOfTable" ? (
+                    <>
+                        {
+                            data?.note ? (<div>{data?.note.map((item: any) => {
+                                return (
+                                    <h4>{item}</h4>
+                                )
+                            })}</div>) : "No Note"
+                        }
+                    </>
+                ) : <></>)
+                }
             </Modal>
         </>
     );
@@ -67,7 +103,10 @@ ModalHome.propTypes = {
 };
 
 ModalHome.defaultProps = {
-    isVisible: false
+    isVisible: false,
+    timeout: 2000,
+    contents: "priceBill",
+    data: {},
 }
 
 export default ModalHome;

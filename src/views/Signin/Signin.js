@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import React, { useEffect } from "react";
+import { Form, Input, Button, Checkbox, notification, Space } from "antd";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
-import './style.scss';
-import { useHistory } from 'react-router';
+import "./style.scss";
+import { useHistory } from "react-router";
 
-import Authenticator from 'action/Login';
+import Authenticator from "action/Login";
+import { useDispatch } from "react-redux";
+import { getProfile } from "Reduces/staffs";
 
 const layout = {
   labelCol: { span: 8 },
@@ -18,49 +20,55 @@ const tailLayout = {
 
 const Signin = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: "Sign In Failed",
+      description: "username or password was incorrect",
+    });
+  };
 
   const onFinish = (values) => {
-    console.log('Success:', values);
     const acc = {
       username: values.username,
       password: values.password,
     };
-    // axios
-    //   .post('https://localhost:5000/login/', acc)
-    //   .then((res) => console.log(res));
     Authenticator.signin(acc).then((response) => {
-      if (!response) return;
-      try {
-        if (response.status) {
-          history.push('/');
-          console.log('Successful');
+      console.log(response);
+      if (!response) {
+        openNotificationWithIcon("error");
+        return;
+      }
+      if (response.status && response.data) {
+        dispatch(getProfile(response.data));
+        //DIVIDE PAGE FOR POSITION
+        if (response.data?.position === "Admin") {
+          history.push("/admin");
+          return;
         }
-      } catch (error) {
-        console.log('fail');
+        history.push("/");
       }
     });
-    // if (checkLogin.status) {
-    //   history.push('/');
-    // }
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.log("Failed:", errorInfo);
   };
 
   const initValue = {
     initialValues: {
-      username: '',
-      password: '',
+      username: "",
+      password: "",
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .min(5, 'Mininum 5 characters')
-        .max(15, 'Maximum 15 characters')
-        .required('Required!'),
+        .min(5, "Mininum 5 characters")
+        .max(15, "Maximum 15 characters")
+        .required("Required!"),
       password: Yup.string()
-        .min(8, 'Minimum 8 characters')
-        .required('Required!'),
+        .min(8, "Minimum 8 characters")
+        .required("Required!"),
     }),
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
@@ -82,7 +90,7 @@ const Signin = () => {
         <Form.Item
           label="Username"
           name="username"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          rules={[{ required: true, message: "Please input your username!" }]}
         >
           <Input
           // autoComplete="off"
@@ -96,7 +104,7 @@ const Signin = () => {
         <Form.Item
           label="Password"
           name="password"
-          rules={[{ required: true, message: 'Please input your password!' }]}
+          rules={[{ required: true, message: "Please input your password!" }]}
         >
           <Input.Password
           // value={formik.values.passwold}

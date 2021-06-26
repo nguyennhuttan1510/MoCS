@@ -1,17 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { socket } from 'config/connectSocket'
+import { socket } from 'components/WebSocket/connectSocket'
 import { useDispatch } from 'react-redux'
 
+
 export interface Istate {
+    isRedirectDetail: boolean,
     table: object,
-    data: Array<any>
+    data: Array<any>,
+    staffs: Array<any>,
 }
 
 
 const state: Istate = {
+    isRedirectDetail: false,
     table: {},
     data: [
-    ]
+    ],
+    staffs: []
 
 }
 
@@ -20,6 +25,7 @@ const dashboard = createSlice({
     name: 'table',
     initialState: state,
     reducers: {
+        setIsDetail: (state, action) => void (state.isRedirectDetail = action.payload),
         table: (state, action) => {
             const table = action.payload;
             console.log("currentT: ", table)
@@ -62,11 +68,13 @@ const dashboard = createSlice({
             console.log(id, food)
 
             state.data = state.data.map(item => item.id === id ? { ...item, menu: item.menu.filter((e: any) => e.id !== food.id) } : item)
-        }
+        },
+
+        staffs: (state, action) => void (state.staffs = action.payload),
 
     },
 })
-export const { table, payBill, addTable, addMenuOfTable, removeMenuOfTable } = dashboard.actions
+export const { table, payBill, addTable, addMenuOfTable, removeMenuOfTable, staffs, setIsDetail } = dashboard.actions
 
 export default dashboard.reducer
 

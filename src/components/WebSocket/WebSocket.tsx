@@ -1,9 +1,8 @@
 import React, { FunctionComponent, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { addTable } from 'Reduces/dashboard';
-import { addStaff } from 'Reduces/staffs';
+import { addTable, staffs } from 'Reduces/dashboard';
 
-import { socket } from 'config/connectSocket'
+import { socket } from 'components/WebSocket/connectSocket'
 import { useDispatch } from 'react-redux';
 
 export interface Iwebsocket {
@@ -19,7 +18,7 @@ const WebSocket: FunctionComponent<Iwebsocket> = (props) => {
 
     socket.on("data-staff", (listStaff) => {
         console.log(listStaff)
-        dispatch(addStaff(listStaff))
+        dispatch(staffs(listStaff))
     });
 
     return (

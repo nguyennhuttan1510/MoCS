@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import { CloudUploadOutlined } from '@ant-design/icons';
 
 import { Row, Col, Tabs, Table, Button, Space, Badge } from 'antd';
-import { MenuFood, MenuDrink } from '../../../util/Table';
-import { ITableDetail } from '../../../interfaces/Home';
+import { MenuFood, MenuDrink } from 'config/configTable';
+import { ITableDetail } from 'interfaces/Home';
 import ModalHome from "components/Modal/Modal"
 import { useCountUp } from 'react-countup';
-import { useDispatch, useSelector } from 'react-redux';
-import { payBill } from 'Reduces/dashboard';
+import { useSelector } from 'react-redux';
 import { defaultTitle } from 'config/_INT'
-import { handlePayBillTable, handlePushMenuToChef } from 'util/socket/action';
+import { handlePayBillTable, handlePushMenuToChef } from 'util/socket/actionHome';
 
 
 var get = require('lodash/get');
@@ -31,18 +30,19 @@ let config = {
 
 const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
     const { order, handleAddMenu, handleRemoveMenu, onClose } = props;
-    const dispatch = useDispatch();
     const table = useSelector((state: Iredux) => state.dashboard.table);
     const { tableDetail } = defaultTitle;
 
     const [isVisible, setIsVisible] = useState<boolean>(false);
     const [isChange, setIsChange] = useState<boolean>(true);
-    const [content, setContent] = useState<any>({
+    const [checkPay, setCheckPay] = useState<number>(0);
+    const [priceBill, setPriceBill] = useState<any>({
         cost: {
             cost: 0,
             format: "",
         },
-        cash: 0
+        cash: 0,
+
     });
 
     const { TabPane } = Tabs;
@@ -90,7 +90,7 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
             render: (item: any) => (
 
                 <Space size="middle">
-                    <Button className="delete" onClick={() => { handleRemoveMenu(item, table.id) }} >delete</Button>
+                    {item?.status === "Order" ? (<Button className="delete" onClick={() => { handleRemoveMenu(item, table.id) }} >delete</Button>) : item?.status === "Pending" ? <div className="noti-table-bill" > Pending </div> : <div className="noti-table-bill food-done" > Done </div>}
                 </Space>
             ),
         },
@@ -100,7 +100,7 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
 
 
     const handleSetCountUp = () => {
-        let start = content.cost.cost;
+        let start = priceBill.cost.cost;
         return { ...config, start }
     }
 
@@ -114,7 +114,7 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
             return { cost: cost, format: format, title: "Payment" }
         }
         const cost = sumMenu();
-        setContent({ cost, cash: 0 });
+        setPriceBill({ cost, cash: 0 });
     }, [order]);
 
     const data = get(order, 'menu');
@@ -128,27 +128,22 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
 
     }
 
-    const handleChangeContent = (value: number) => {
+    const handleChangePriceBill = (value: number) => {
         let cash = 0;
-        if (content) {
-            cash = value - content.cost.cost
-            setContent((prev: any) => { return { ...prev, cash: cash } });
+        setCheckPay(value)
+        if (priceBill) {
+            cash = value - priceBill.cost.cost
+            setPriceBill((prev: any) => { return { ...prev, cash: cash } });
         }
     }
     const handleClickOK = () => {
+        if (!order || (checkPay < 0 || priceBill.cash < 0)) return
         start();
         setIsChange(false)
-
-        if (order) {
-            // const action = payBill(order.id);
-            // dispatch(action)
-
-            handlePayBillTable(order.id)
-
-            setTimeout(() => {
-                onClose(false)
-            }, 2000);
-        }
+        handlePayBillTable(order.id)
+        setTimeout(() => {
+            onClose(false)
+        }, 2000);
 
 
     }
@@ -165,11 +160,11 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
 
     return (
         <>
-            <ModalHome content={content} isVisible={isVisible} handleSetIsVisible={handleSetIsVisible} handleChangeContent={handleChangeContent} handleClickOK={handleClickOK} />
+            <ModalHome contents="priceBill" data={priceBill} isVisible={isVisible} handleSetIsVisible={handleSetIsVisible} handleChangeData={handleChangePriceBill} handleClickOK={handleClickOK} />
             <Button className="close_table" onClick={() => { onClose(false) }}>X</Button>
             <div className="wrap_table_detail">
                 <div className="total_cost" onClick={() => { setIsVisible(!isVisible) }} >
-                    {isChange ? (`${content.cost.format} VND`) : (`${countUp} VND`)}
+                    {isChange ? (`${priceBill.cost.format} VND`) : (`${countUp} VND`)}
                 </div>
                 <Tabs defaultActiveKey="1">
 
@@ -207,7 +202,7 @@ const TableDetail: React.FunctionComponent<ITableDetail> = (props) => {
                         <Table columns={columns} dataSource={data} onChange={onChange} pagination={false} />
                         <div className="footer-action"><Button type="primary" shape="round" icon={<CloudUploadOutlined />} size={"large"} onClick={() => { handlePushMenuToChef(table) }} >
                             Push
-        </Button></div>
+                        </Button></div>
                     </TabPane>
                 </Tabs>
 

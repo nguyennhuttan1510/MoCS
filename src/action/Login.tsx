@@ -16,7 +16,6 @@ const signin = async (account: Iaccount) => {
         const httpClient = HttpClient();
         const handleResponse = await httpClient.post('login/', acc)         //NOTE REMENBER ADD "/" SUCH AS SERVER
         result = await handleResponse.data;
-        console.log(result);
     } catch (error) {
         console.log(error)
     }

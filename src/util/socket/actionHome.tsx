@@ -1,4 +1,4 @@
-import { socket } from 'config/connectSocket'
+import { socket } from 'components/WebSocket/connectSocket'
 import { addTable } from 'Reduces/dashboard';
 
 export const handleAddTable = (payload: any) => {
@@ -15,9 +15,13 @@ export const handlePayBillTable = (payload: number) => {
 
 export const handleRemoveFood = (payload: object) => {
     socket.emit("remove-menu", payload)
-}
+};
 
 export const handlePushMenuToChef = (payload: object) => {
     socket.emit("push-to-chef", payload)
-}
+};
+
+export const handleChefSelectFood = (payload: object) => {
+    socket.emit("make-food", payload)
+};
 

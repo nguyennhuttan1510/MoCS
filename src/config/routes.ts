@@ -6,20 +6,15 @@ const NoLayout = lazy(()=>import('layouts/NoLayout/NoLayout')) ;
 const Home = lazy(() => import("../views/Home/Home"));
 const Main = lazy(() => import("../layouts/Main/Main"));
 
+
+
 const routes: IRoute[] =[
     {
         path : "/",
-        component: Home,
+        component:  Home ,
         layout: Main,
         exact: true,
         name: "Home Page"
-    },
-    {
-        path : "/login",
-        component: Signin,
-        layout: NoLayout,
-        exact: true,
-        name: "Login Page"
     },
     // {
     //     path : "/detail-table",
