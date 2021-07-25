@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
-import { Form, Input, Button, Checkbox, notification, Space } from "antd";
+import { Form, Input, Button, Checkbox } from "antd";
+import { openNotificationWithIcon } from "components/Notification/Notification";
+
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -22,22 +24,18 @@ const Signin = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Sign In Failed",
-      description: "username or password was incorrect",
-    });
-  };
-
   const onFinish = (values) => {
     const acc = {
       username: values.username,
       password: values.password,
     };
     Authenticator.signin(acc).then((response) => {
-      console.log(response);
       if (!response) {
-        openNotificationWithIcon("error");
+        openNotificationWithIcon(
+          "error",
+          "Login Failed",
+          "Username or Password incorrect"
+        );
         return;
       }
       if (response.status && response.data) {
@@ -85,20 +83,13 @@ const Signin = () => {
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        // onSubmit={formik.handleSubmit}
       >
         <Form.Item
           label="Username"
           name="username"
           rules={[{ required: true, message: "Please input your username!" }]}
         >
-          <Input
-          // autoComplete="off"
-          // type="text"
-          // name="username"
-          // value={formik.values.username}
-          // onChange={formik.handleChange}
-          />
+          <Input />
         </Form.Item>
 
         <Form.Item
@@ -106,14 +97,7 @@ const Signin = () => {
           name="password"
           rules={[{ required: true, message: "Please input your password!" }]}
         >
-          <Input.Password
-          // value={formik.values.passwold}
-          // name="passwold"
-          // onChange={formik.handleChange}
-          />
-          {/* {formik.errors.passwold && formik.touched.passwold && (
-            <p>{formik.errors.passwold}</p>
-          )} */}
+          <Input.Password />
         </Form.Item>
 
         <Form.Item {...tailLayout} name="remember" valuePropName="checked">

@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 
 const HttpClient = (config) => {
   const headerOptions = {
-    'Content-type': 'application/json',
-    'cache-control': 'no-cache',
+    "Content-type": "application/json",
+    "cache-control": "no-cache",
   };
 
   //   const itemLocalStorage = 'user';
@@ -16,7 +16,7 @@ const HttpClient = (config) => {
   //   }
 
   return axios.create({
-    baseURL: 'http://localhost:5000/', // ENV LOCAL IS "HTTP://"
+    baseURL: "http://localhost:5000/", // ENV LOCAL IS "HTTP://"
     headers: headerOptions,
   });
 };

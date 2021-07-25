@@ -1,28 +1,24 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface Istate {
-    profile: object,
+  profile: object;
+  isLogin: boolean;
 }
-
 
 const state: Istate = {
-    profile: {},
-
-}
+  profile: {},
+  isLogin: false,
+};
 
 const staffs = createSlice({
+  name: "profile",
+  initialState: state,
+  reducers: {
+    // addStaff: (state, action) => { console.log(action.payload); state.data = action.payload },
+    getProfile: (state, action) => void (state.profile = action.payload),
+    login: (state, action) => void (state.isLogin = action.payload),
+  },
+});
+export const { getProfile, login } = staffs.actions;
 
-    name: 'profile',
-    initialState: state,
-    reducers: {
-        // addStaff: (state, action) => { console.log(action.payload); state.data = action.payload },
-        getProfile: (state, action) => void (state.profile = action.payload),
-
-
-    },
-})
-export const { getProfile } = staffs.actions
-
-export default staffs.reducer
-
-
+export default staffs.reducer;
