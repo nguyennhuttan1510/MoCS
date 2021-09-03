@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import dashboard from "./reduces/dashboard";
-import user from "./reduces/user";
-import management from "reduces/management-staff";
 import current from "reduces/current";
+import dashboard from "reduces/dashboard";
+import management from "reduces/management-staff";
+import user from "reduces/user";
 const store = configureStore({
   reducer: {
     dashboard: dashboard,
