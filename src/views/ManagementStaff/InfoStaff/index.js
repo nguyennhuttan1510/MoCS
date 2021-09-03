@@ -2,7 +2,7 @@ import React from "react";
 import { Table, Space, Button, Row, Col } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import { deleteStaff } from "action/Staff";
+import { deleteStaff } from "api/Staff";
 import { openNotificationWithIcon } from "components/Notification/Notification";
 
 import { upCaseFirst } from "config/func/handleString";
@@ -10,9 +10,10 @@ import { convertDate } from "config/func/handleDate";
 import {
   handleGetAllManagement,
   handleGetAllStaff,
-} from "util/socket/actionHome";
+} from "util/socket/ActionHome";
+import { Link } from "react-router-dom";
 
-const ManageStaff = (props) => {
+const InfoStaff = (props) => {
   const { setIsVisible } = props;
 
   const listStaff = useSelector((state) => state.dashboard.staffs);
@@ -42,7 +43,9 @@ const ManageStaff = (props) => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      render: (text) => <a>{upCaseFirst(text)}</a>,
+      render: (text, record) => (
+        <Link to={`/profile/${record.id}`}>{upCaseFirst(text)}</Link>
+      ),
     },
     {
       title: "Phone",
@@ -129,6 +132,6 @@ const ManageStaff = (props) => {
   );
 };
 
-ManageStaff.propTypes = {};
+InfoStaff.propTypes = {};
 
-export default ManageStaff;
+export default InfoStaff;

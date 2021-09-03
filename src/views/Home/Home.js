@@ -7,19 +7,19 @@ import TableDetail from "views/Home/components/TableDetail";
 import ListTable from "views/Home/components/ListTable";
 import ChefDetail from "views/Home/components/ChefDetail";
 
-import { table, setIsDetail } from "Reduces/dashboard";
+import { table, setIsDetail } from "reduces/dashboard";
 
 import {
   handleAddTable,
   handleAddMenuTable,
   handleRemoveFood,
-} from "util/socket/actionHome";
+} from "util/socket/ActionHome";
 import { openNotificationWithIcon } from "components/Notification/Notification";
 
-const Home = (props) => {
+const Home = () => {
   const state = useSelector((state) => state.dashboard);
   const { isRedirectDetail } = state;
-  const profile = useSelector((state) => state.staffs.profile);
+  const profile = useSelector((state) => state.user.profile);
   const tableCurrent = state.table;
   const tablesActive = state.data;
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const Home = (props) => {
     return result[0];
   };
 
-  const onClose = (isClose) => {
+  const onClose = () => {
     dispatch(setIsDetail(false));
     dispatch(table(false));
   };

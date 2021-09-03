@@ -177,6 +177,7 @@ const ModalHome: React.FunctionComponent<Imodal> = (props: any) => {
             <Form.Item label="Name">
               <Input
                 name="name"
+                value={data.name}
                 onChange={(e) => {
                   changeDataForm(e);
                 }}
@@ -185,6 +186,7 @@ const ModalHome: React.FunctionComponent<Imodal> = (props: any) => {
             <Form.Item label="Price">
               <Input
                 name="price"
+                value={data.price}
                 onChange={(e) => {
                   changeDataForm(e);
                 }}
@@ -192,6 +194,7 @@ const ModalHome: React.FunctionComponent<Imodal> = (props: any) => {
             </Form.Item>
             <Form.Item label="Category">
               <Select
+                value={data.category}
                 onChange={(e) => {
                   handleChangeData(e, "category");
                 }}
@@ -202,6 +205,7 @@ const ModalHome: React.FunctionComponent<Imodal> = (props: any) => {
             </Form.Item>
             <Form.Item label="Discount">
               <Input
+                value={data.discount}
                 name="discount"
                 onChange={(e) => {
                   changeDataForm(e);
@@ -215,8 +219,9 @@ const ModalHome: React.FunctionComponent<Imodal> = (props: any) => {
             wrapperCol={{ span: 18 }}
             layout="horizontal"
           >
-            <Form.Item label="Name Table">
+            <Form.Item label="Name">
               <Input
+                value={data.name}
                 name="name"
                 onChange={(e) => {
                   changeDataForm(e);

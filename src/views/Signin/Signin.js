@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Form, Input, Button, Checkbox } from "antd";
 import { openNotificationWithIcon } from "components/Notification/Notification";
+import { setTitleHeader } from "reduces/current";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -8,9 +9,10 @@ import * as Yup from "yup";
 import "./style.scss";
 import { useHistory } from "react-router";
 
-import Authenticator from "action/Login";
+import Authenticator from "api/Auth";
 import { useDispatch } from "react-redux";
-import { getProfile } from "Reduces/staffs";
+import { getProfile } from "reduces/user";
+import useHeader from "hook/useHeader";
 
 const layout = {
   labelCol: { span: 8 },
@@ -23,6 +25,8 @@ const tailLayout = {
 const Signin = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const headerTitle = useHeader();
 
   const onFinish = (values) => {
     const acc = {
@@ -42,9 +46,12 @@ const Signin = () => {
         dispatch(getProfile(response.data));
         //DIVIDE PAGE FOR POSITION
         if (response.data?.position === "Admin") {
-          history.push("/admin");
+          dispatch(setTitleHeader("Management Business"));
+          history.push("/admin/management-business");
+
           return;
         }
+        dispatch(setTitleHeader("Dashboard"));
         history.push("/");
       }
     });
@@ -61,7 +68,7 @@ const Signin = () => {
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .min(5, "Mininum 5 characters")
+        .min(5, "Minimum 5 characters")
         .max(15, "Maximum 15 characters")
         .required("Required!"),
       password: Yup.string()

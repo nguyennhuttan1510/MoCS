@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { socket } from "components/WebSocket/connectSocket";
-import { useDispatch } from "react-redux";
 
 const state = {
   managementStaff: [],
@@ -14,10 +12,10 @@ const management = createSlice({
     managementStaff: (state, action) =>
       void (state.managementStaff = action.payload),
 
-    managementBestSeller: (state, action) =>
+    foodBestSeller: (state, action) =>
       void (state.managementBestSeller = action.payload),
   },
 });
-export const { managementStaff, managementBestSeller } = management.actions;
+export const { managementStaff, foodBestSeller } = management.actions;
 
 export default management.reducer;

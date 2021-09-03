@@ -3,7 +3,6 @@ import { CloudUploadOutlined } from "@ant-design/icons";
 import { openNotificationWithIcon } from "components/Notification/Notification";
 
 import { Row, Col, Tabs, Table, Button, Space, Badge } from "antd";
-// import { MenuFood, MenuDrink } from "config/configTable";
 import ModalHome from "components/Modal/Modal";
 import { useCountUp } from "react-countup";
 import { useSelector } from "react-redux";
@@ -11,7 +10,7 @@ import { defaultTitle } from "config/_INT";
 import {
   handlePayBillTable,
   handlePushMenuToChef,
-} from "util/socket/actionHome";
+} from "util/socket/ActionHome";
 import { formatMoney } from "config/func/handleDate";
 import { upCaseFirst } from "config/func/handleString";
 
@@ -30,7 +29,7 @@ const TableDetail = (props) => {
   const { order, handleAddMenu, handleRemoveMenu, onClose } = props;
   const table = useSelector((state) => state.dashboard.table);
   const Menu = useSelector((state) => state.dashboard.listMenu);
-  const profile = useSelector((state) => state.staffs.profile);
+  const profile = useSelector((state) => state.user.profile);
 
   const { tableDetail } = defaultTitle;
 
@@ -131,7 +130,7 @@ const TableDetail = (props) => {
     setPriceBill({ cost, cash: 0 });
   }, [order]);
 
-  const data = get(order, "menu");
+  const listFoodOrder = get(order, "menu", []);
   const isMakeFood = get(order, "isMakeFood");
 
   const handleSetIsVisible = () => {
@@ -149,7 +148,7 @@ const TableDetail = (props) => {
     }
   };
   const handleClickOK = () => {
-    if (!order || checkPay < 0 || priceBill.cash < 0) return;
+    if (!order || checkPay <= 0 || priceBill.cash < 0) return;
     start();
     setIsChange(false);
     const payload = {
@@ -164,16 +163,16 @@ const TableDetail = (props) => {
 
   const handleBadgeFood = useCallback(
     (item) => {
-      if (!data) return;
-      const isBadge = data.find((e) => e.id === item.id);
+      if (!listFoodOrder) return;
+      const isBadge = listFoodOrder.find((e) => e.id === item.id);
       if (!isBadge || isBadge === undefined) return;
       return isBadge.count;
     },
-    [data]
+    [listFoodOrder]
   );
 
   return (
-    <>
+    <div className="dashboard">
       <ModalHome
         contents="priceBill"
         data={priceBill}
@@ -194,12 +193,12 @@ const TableDetail = (props) => {
         <div
           className="total_cost"
           onClick={() =>
-            isMakeFood
+            isMakeFood || priceBill.cost.cost === 0
               ? setIsVisible(!isVisible)
               : openNotificationWithIcon(
                   "error",
-                  "Fail",
-                  "Cliend Ordering, can't pay!"
+                  "Failed",
+                  "Client is ordering, can't pay!"
                 )
           }
         >
@@ -252,7 +251,11 @@ const TableDetail = (props) => {
             className="tab_table bold"
             key="3"
           >
-            <Table columns={columns} dataSource={data} pagination={false} />
+            <Table
+              columns={columns}
+              dataSource={listFoodOrder}
+              pagination={false}
+            />
             <div className="footer-action">
               <Button
                 type="primary"
@@ -264,10 +267,10 @@ const TableDetail = (props) => {
                   openNotificationWithIcon(
                     "success",
                     "Success",
-                    "Making Food, please wait"
+                    "Food is making , please wait"
                   );
                 }}
-                disabled={isMakeFood}
+                disabled={isMakeFood || listFoodOrder?.length === 0}
               >
                 Push
               </Button>
@@ -275,7 +278,7 @@ const TableDetail = (props) => {
           </TabPane>
         </Tabs>
       </div>
-    </>
+    </div>
   );
 };
 

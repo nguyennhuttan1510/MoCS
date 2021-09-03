@@ -1,15 +1,11 @@
-import React, { FunctionComponent } from "react";
-import { addTable, staffs, listMenu, listTable } from "Reduces/dashboard";
-import { managementStaff } from "Reduces/management-staff";
+import React from "react";
+import { addTable, staffs, listMenu, listTable } from "reduces/dashboard";
+import { managementStaff, foodBestSeller } from "reduces/management-staff";
 
-import { socket } from "components/WebSocket/connectSocket";
+import { socket } from "service/WebSocket/ConnectSocket";
 import { useDispatch } from "react-redux";
 
-export interface Iwebsocket {
-  children: React.ReactNode;
-}
-
-const WebSocket: FunctionComponent<Iwebsocket> = (props) => {
+const WebSocket = (props) => {
   const dispatch = useDispatch();
 
   socket.on("data-table", (listTable) => {
@@ -35,6 +31,10 @@ const WebSocket: FunctionComponent<Iwebsocket> = (props) => {
     dispatch(listTable(data));
   });
 
+  socket.on("data-best-seller", (data) => {
+    console.log(data);
+    dispatch(foodBestSeller(data));
+  });
   return <>{props.children}</>;
 };
 

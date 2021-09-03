@@ -10,15 +10,14 @@ const state: Istate = {
   isLogin: false,
 };
 
-const staffs = createSlice({
+const user = createSlice({
   name: "profile",
   initialState: state,
   reducers: {
-    // addStaff: (state, action) => { console.log(action.payload); state.data = action.payload },
     getProfile: (state, action) => void (state.profile = action.payload),
     login: (state, action) => void (state.isLogin = action.payload),
   },
 });
-export const { getProfile, login } = staffs.actions;
+export const { getProfile, login } = user.actions;
 
-export default staffs.reducer;
+export default user.reducer;

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import {
   DesktopOutlined,
   PieChartOutlined,
@@ -12,13 +11,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 import "style/_Main.scss";
 import { upCaseFirst } from "config/func/handleString";
-import { setIsDetail, table } from "Reduces/dashboard";
+import { setIsDetail, table } from "reduces/dashboard";
 import { NavLink } from "react-router-dom";
+import useHeader from "hook/useHeader";
 
 const Main: React.FC = (props: any) => {
   const [collapsed, setCollapsed] = useState(false);
   const dashboard = useSelector((state: any) => state.dashboard);
-  const profile = useSelector((state: any) => state.staffs.profile);
+  const profile = useSelector((state: any) => state.user.profile);
   const dispatch = useDispatch();
   let router = props.match.path;
   const { staffs } = dashboard;
@@ -28,9 +28,10 @@ const Main: React.FC = (props: any) => {
   const { Header, Content, Footer, Sider } = Layout;
   const { SubMenu } = Menu;
   const { children } = props;
+  const [headerTitle, setHeaderTitle] = useHeader();
   return (
     <>
-      <Layout style={{ minHeight: "100vh" }}>
+      <Layout style={{ minHeight: "100vh", height: "100%" }}>
         <Sider
           collapsible
           collapsed={collapsed}
@@ -41,21 +42,42 @@ const Main: React.FC = (props: any) => {
           <div className="logo" />
           <Menu
             theme="dark"
-            defaultSelectedKeys={profile.position === "Admin" ? ["2"] : ["1"]}
+            // defaultSelectedKeys={profile.position === "Admin" ? ["2"] : ["1"]}
             mode="inline"
           >
             {profile && profile.position === "Admin" && (
               <>
                 <Menu.Item key="2" icon={<DesktopOutlined />}>
-                  <NavLink to="/admin">Financial Analytics</NavLink>
+                  <NavLink
+                    to="/admin/management-business"
+                    onClick={() => {
+                      setHeaderTitle("Business Management");
+                    }}
+                  >
+                    Business
+                  </NavLink>
                 </Menu.Item>
                 <Menu.Item key="3" icon={<FileOutlined />}>
-                  <NavLink to="/management-staff">Management Staff</NavLink>
+                  <NavLink
+                    to="/admin/management-staff"
+                    onClick={() => {
+                      setHeaderTitle("Personnel Management");
+                    }}
+                  >
+                    Personnel
+                  </NavLink>
                 </Menu.Item>
               </>
             )}
             <Menu.Item key="1" icon={<PieChartOutlined />}>
-              <NavLink to="/">Dashboard</NavLink>
+              <NavLink
+                to="/"
+                onClick={() => {
+                  setHeaderTitle("Dashboard");
+                }}
+              >
+                Dashboard
+              </NavLink>
             </Menu.Item>
 
             <>
@@ -95,13 +117,20 @@ const Main: React.FC = (props: any) => {
               </SubMenu>
             </>
             <Menu.Item key="4" icon={<PieChartOutlined />}>
-              <NavLink to="/profile">Profile</NavLink>
+              <NavLink
+                to={`/profile/${profile.id}`}
+                onClick={() => {
+                  setHeaderTitle("Profile");
+                }}
+              >
+                Profile
+              </NavLink>
             </Menu.Item>
           </Menu>
         </Sider>
-        <Layout className="site-layout">
+        <Layout className="site-layout" style={{ height: "100%" }}>
           <Header className="site-layout-background header_home_page">
-            <div className="header-left">Header</div>
+            <div className="header-left">{headerTitle}</div>
             <div className="header-right">
               <span className="username-header">
                 {upCaseFirst(profile.name)}
@@ -109,10 +138,11 @@ const Main: React.FC = (props: any) => {
               <UserOutlined className="icon-header-right" />
             </div>
           </Header>
-          <Content className="content">
+          <Content className="content" style={{ overflow: "auto" }}>
             {router && router === "/" && (
               <Breadcrumb className="breadcrumb_title">
                 <Breadcrumb.Item
+                  className="breadcrumb_item"
                   onClick={() => {
                     dispatch(setIsDetail(false));
                     dispatch(table(false));
@@ -140,7 +170,5 @@ const Main: React.FC = (props: any) => {
     </>
   );
 };
-
-Main.propTypes = {};
 
 export default Main;

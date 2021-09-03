@@ -8,7 +8,7 @@ import { formatMoney } from "config/func/handleDate";
 
 import { useSelector } from "react-redux";
 
-const TargetStaff = (props) => {
+const Salary = (props) => {
   const dataManagement = useSelector(
     (state) => state.management.managementStaff
   );
@@ -85,7 +85,6 @@ const TargetStaff = (props) => {
         </Col> */}
         <Col span={24}>
           <div className="table-salary">
-            <p>Salary Staffs</p>
             <TableSalary data={data} columns={columns} />
           </div>
         </Col>
@@ -94,6 +93,6 @@ const TargetStaff = (props) => {
   );
 };
 
-TargetStaff.propTypes = {};
+Salary.propTypes = {};
 
-export default TargetStaff;
+export default Salary;

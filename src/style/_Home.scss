@@ -16,6 +16,7 @@ $fontWeight: 700;
         .table {
           padding: 7px;
           display: flex;
+          text-align: center;
           justify-content: center;
           align-items: center;
           width: 80px;
@@ -63,6 +64,7 @@ $fontWeight: 700;
     justify-content: center;
     align-items: center;
     z-index: 2;
+    cursor: pointer;
   }
 }
 .total_cost {
@@ -77,15 +79,17 @@ $fontWeight: 700;
   margin-bottom: 20px;
 }
 .ant-tabs-tab {
-  &.ant-tabs-tab-active {
-    &:nth-child(3) {
-      color: #1890ff;
+  .dashboard {
+    &.ant-tabs-tab-active {
+      &:nth-child(3) {
+        color: #1890ff;
+      }
     }
-  }
-  &:nth-child(3) {
-    border: 1px solid;
-    padding: 0px 15px;
-    border-radius: 5px;
+    &:nth-child(3) {
+      border: 1px solid;
+      padding: 0px 15px;
+      border-radius: 5px;
+    }
   }
   .ant-tabs-tab-btn {
     font-weight: 600;

@@ -1,4 +1,4 @@
-import { socket } from "components/WebSocket/connectSocket";
+import { socket } from "service/WebSocket/ConnectSocket";
 
 export const handleAddTable = (payload: any) => {
   socket.emit("add-table", payload);

@@ -1,21 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import './App.css';
-import Routes from './Routes';
-// import {BrowserRouter as Router} from 'react-router-dom';
-import { BrowserRouter as Router, } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
+import React from "react";
+import "./App.css";
+import Routes from "./Routes";
+import { BrowserRouter as Router } from "react-router-dom";
 
-import { socket } from 'components/WebSocket/connectSocket'
-
-const browserHistory = createBrowserHistory();
-
+import { socket } from "service/WebSocket/ConnectSocket";
 
 socket.on("connect", () => {
   console.log(socket.id + " đã kết nối!");
 });
 
-const App: React.FC = props => {
+const App: React.FC = (props) => {
   return (
     <Router>
       <Routes />
@@ -23,11 +17,4 @@ const App: React.FC = props => {
   );
 };
 
-App.propTypes = {
-
-};
-
 export default App;
-
-
-

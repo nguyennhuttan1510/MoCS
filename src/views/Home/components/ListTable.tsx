@@ -1,21 +1,20 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Row, Col, Badge } from "antd";
-// import { Table } from 'config/configTable';
 import { IListTable } from "interfaces/Home";
 import { useSelector } from "react-redux";
 
 const ListTable: React.FunctionComponent<IListTable> = (props) => {
   const { handleSelectTable, listTable } = props;
-  const ListTable = useSelector((state: any) => state.dashboard.listTable);
+  const ListTables = useSelector((state: any) => state.dashboard.listTable);
   const isActiveTable = (item: any) => {
-    const isNewTbale = listTable.some((e) => e.id === item.id);
-    const isOrderedTbale = listTable.some(
+    const isActiveTable = listTable.some((e) => e.id === item.id);
+    const isOrderedTable = listTable.some(
       (e) => e.id === item.id && e.isMakeFood
     );
-    if (isNewTbale && isOrderedTbale) {
+    if (isActiveTable && isOrderedTable) {
       return "processing";
     }
-    if (isNewTbale) {
+    if (isActiveTable) {
       return "active";
     }
   };
@@ -26,10 +25,22 @@ const ListTable: React.FunctionComponent<IListTable> = (props) => {
     const countFoodHaveDone = table.menu.filter((e) => e.status !== "Done");
     return countFoodHaveDone.length;
   };
+
+  const sortListTable = useMemo(() => {
+    if (!ListTables) return [];
+    const cloneListTables = [...ListTables];
+    cloneListTables.sort((a: any, b: any) => {
+      const wordA: any = a.name.split(" ");
+      const wordB: any = b.name.split(" ");
+      return wordA[1] && wordB[1] ? wordA[1] - wordB[1] : 0;
+    });
+    return cloneListTables;
+  }, [ListTables]);
+
   return (
     <>
       <Row>
-        {ListTable.map((item: any, key: any) => (
+        {sortListTable.map((item: any, key: any) => (
           <Col key={key} className="list_table" span={4}>
             <Badge count={foodStatusOrder(item)}>
               <div
@@ -47,7 +58,5 @@ const ListTable: React.FunctionComponent<IListTable> = (props) => {
     </>
   );
 };
-
-ListTable.propTypes = {};
 
 export default ListTable;

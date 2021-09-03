@@ -1,13 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import dashboard from "./Reduces/dashboard";
-import staffs from "./Reduces/staffs";
-import management from "Reduces/management-staff";
-
+import dashboard from "./reduces/dashboard";
+import user from "./reduces/user";
+import management from "reduces/management-staff";
+import current from "reduces/current";
 const store = configureStore({
   reducer: {
     dashboard: dashboard,
-    staffs: staffs,
+    user: user,
     management: management,
+    current: current,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;

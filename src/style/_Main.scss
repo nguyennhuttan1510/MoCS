@@ -29,4 +29,11 @@ $fontWeight: 700;
     font-weight: $fontWeight;
     font-size: 24px;
   }
+  .content {
+    .breadcrumb_title {
+      .breadcrumb_item {
+        cursor: pointer;
+      }
+    }
+  }
 }

@@ -49,7 +49,6 @@ const dashboard = createSlice({
       tables.splice(index, 1);
     },
 
-    // addTable: (state, action) => void (state.data = [...state.data, action.payload]),
     addTable: (state, action) => void (state.data = action.payload),
 
     addMenuOfTable: (state, action) => {
@@ -62,7 +61,6 @@ const dashboard = createSlice({
     removeMenuOfTable: (state, action) => {
       //id = id table, food = food has removed in table
       const { id, food } = action.payload;
-      console.log(id, food);
 
       state.data = state.data.map((item) =>
         item.id === id

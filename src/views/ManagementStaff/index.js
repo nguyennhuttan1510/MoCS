@@ -6,18 +6,16 @@ import { Tabs } from "antd";
 
 import "./style.scss";
 import { useState } from "react";
-import { createStaff } from "action/Staff";
+import { createStaff } from "api/Staff";
 import { openNotificationWithIcon } from "components/Notification/Notification";
-import ManageStaff from "./ManageStaff";
-import TargetStaff from "./TargetStaff";
-import { useDispatch } from "react-redux";
+import InfoStaff from "./InfoStaff";
+import SalaryStaff from "./Salary";
 import {
   handleGetAllManagement,
   handleGetAllStaff,
-} from "util/socket/actionHome";
+} from "util/socket/ActionHome";
 
 const ManagementStaff = (props) => {
-  const dispatch = useDispatch();
   const [isVisible, setIsVisible] = useState(false);
   const [formCreate, setFormCreate] = useState({});
 
@@ -57,11 +55,11 @@ const ManagementStaff = (props) => {
         handleSetIsVisible={handleSetIsVisible}
       />
       <Tabs defaultActiveKey="1">
-        <TabPane tab="STAFF" key="1">
-          <ManageStaff setIsVisible={setIsVisible} />
+        <TabPane tab="INFORMATION" key="1">
+          <InfoStaff setIsVisible={setIsVisible} />
         </TabPane>
-        <TabPane tab="MANAGEMENT" key="2">
-          <TargetStaff />
+        <TabPane tab="SALARY" key="2">
+          <SalaryStaff />
         </TabPane>
       </Tabs>
     </div>

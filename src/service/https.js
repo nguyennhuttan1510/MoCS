@@ -6,17 +6,8 @@ const HttpClient = (config) => {
     "cache-control": "no-cache",
   };
 
-  //   const itemLocalStorage = 'user';
-
-  //   if (config) {
-  //     if (config.useAccessToken) {
-  //       const currentUser = JSON.parse(localStorage.getItem(itemLocalStorage));
-  //       headerOptions.Authorization = `Bearer ${currentUser.access_token}`;
-  //     }
-  //   }
-
   return axios.create({
-    baseURL: "http://localhost:5000/", // ENV LOCAL IS "HTTP://"
+    baseURL: process.env.REACT_APP_API_SERVER, // ENV LOCAL IS "HTTP://"
     headers: headerOptions,
   });
 };

@@ -2,61 +2,21 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
+import "../style.scss";
+
 import React, { useLayoutEffect } from "react";
-import PropTypes from "prop-types";
-// import { useEffect } from "react";
 import { useRef } from "react";
 
 const ChartBestSeller = (props) => {
-  const { data, id } = props;
-  console.log("render");
+  const { dataBestSeller, id } = props;
   const chartA = useRef(null);
-  // let chart = am4core.create("chart", am4charts.PieChart);
   useLayoutEffect(() => {
     am4core.useTheme(am4themes_animated);
     // Themes end
 
     let chart = am4core.create(id, am4charts.XYChart);
 
-    let data = [];
-    let value = 120;
-
-    let names = [
-      "Raina",
-      "Demarcus",
-      "Carlo",
-      "Jacinda",
-      "Richie",
-      "Antony",
-      "Amada",
-      "Idalia",
-      "Janella",
-      "Marla",
-      "Curtis",
-      "Shellie",
-      "Meggan",
-      "Nathanael",
-      "Jannette",
-      "Tyrell",
-      "Sheena",
-      "Maranda",
-      "Briana",
-      "Rosa",
-      "Rosanne",
-      "Herman",
-      "Wayne",
-      "Shamika",
-      "Suk",
-      "Clair",
-      "Olivia",
-      "Hans",
-      "Glennie",
-    ];
-
-    for (var i = 0; i < names.length; i++) {
-      value += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 5);
-      data.push({ category: names[i], value: value });
-    }
+    let data = dataBestSeller;
 
     chart.data = data;
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
@@ -100,14 +60,18 @@ const ChartBestSeller = (props) => {
     chart.scrollbarY = new am4core.Scrollbar();
 
     chartA.current = chart;
-
     return () => {
       chart.dispose();
     };
   }, []);
   return (
-    <div style={{ marginBottom: "50px" }}>
-      <div style={{ height: "375px" }} id={id}></div>
+    <div className="best-seller">
+      <div>
+        <h2>Best Seller</h2>
+      </div>
+      <div style={{ marginBottom: "50px" }}>
+        <div style={{ height: "375px" }} id={id}></div>
+      </div>
     </div>
   );
 };
