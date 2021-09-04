@@ -52,7 +52,7 @@ const Signin = () => {
           return;
         }
         dispatch(setTitleHeader("Dashboard"));
-        history.push("/");
+        history.push("/MoCS");
       }
     });
   };

@@ -64,7 +64,7 @@ const Profile = (props) => {
               className="avatar"
               style={{
                 backgroundImage: profile.avatar
-                  ? `url("http://localhost:5000/public/uploads/1626881544984-1f1d4099-6fb5-45e8-9bdb-ab5e155c291d.jpg")`
+                  ? `url("${process.env.REACT_APP_API_SERVER}/public/uploads/1626881544984-1f1d4099-6fb5-45e8-9bdb-ab5e155c291d.jpg")`
                   : "black",
               }}
             ></div>
