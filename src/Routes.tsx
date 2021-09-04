@@ -24,7 +24,7 @@ const Routes: React.FC = (props: any) => {
   `;
   const routes: IRoute[] = [
     {
-      path: "/",
+      path: "/MoCS",
       component: Home,
       layout: Main,
       exact: true,
