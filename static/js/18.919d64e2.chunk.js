@@ -1,0 +1,2 @@
+(this.webpackJsonptypescript=this.webpackJsonptypescript||[]).push([[18],{658:function(t,c,n){},761:function(t,c,n){"use strict";n.r(c);n(0),n(658);var s=n(2);c.default=function(t){var c=t.children;return Object(s.jsx)("div",{className:"nolayout",children:c})}}}]);
+//# sourceMappingURL=18.919d64e2.chunk.js.map
