@@ -2,6 +2,7 @@
   "name": "typescript",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://nguyennhuttan1510.github.io/MoCS/",
   "dependencies": {
     "@amcharts/amcharts4": "^4.10.20",
     "@amcharts/amcharts4-fonts": "^4.0.1",
@@ -20,6 +21,7 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
     "formik": "^2.2.9",
+    "gh-pages": "^3.2.3",
     "history": "^5.0.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
@@ -40,7 +42,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

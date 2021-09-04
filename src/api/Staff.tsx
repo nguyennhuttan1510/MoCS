@@ -23,7 +23,7 @@ export const createStaff = async (objStaff: IStaff) => {
   let result;
   try {
     const httpClient = HttpClient();
-    const handleResponse = await httpClient.post("staff/", form);
+    const handleResponse = await httpClient.post("/staff/", form);
     result = await handleResponse.data;
   } catch (error) {
     console.log(error);
@@ -50,7 +50,7 @@ export const deleteStaff = async (id: any) => {
   let result;
   try {
     const httpClient = HttpClient();
-    const handleResponse = await httpClient.delete(`staff/${id}`);
+    const handleResponse = await httpClient.delete(`/staff/${id}`);
     result = await handleResponse.data;
   } catch (error) {
     console.log(error);
@@ -62,7 +62,7 @@ export const getAllStaff = async () => {
   let result;
   try {
     const httpClient = HttpClient();
-    const handleResponse = await httpClient.get(`staff/`);
+    const handleResponse = await httpClient.get(`/staff/`);
     result = handleResponse.data;
   } catch (err) {
     console.log(err);

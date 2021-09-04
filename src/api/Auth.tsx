@@ -14,7 +14,7 @@ const signin = async (account: Iaccount) => {
   let result;
   try {
     const httpClient = HttpClient();
-    const handleResponse = await httpClient.post("login/", acc); //NOTE REMENBER ADD "/" SUCH AS SERVER
+    const handleResponse = await httpClient.post("/login/", acc); //NOTE REMENBER ADD "/" SUCH AS SERVER
     result = await handleResponse.data;
   } catch (error) {
     console.log(error);
@@ -26,7 +26,7 @@ const getStaff = async (id: string) => {
   let result;
   try {
     const httpClient = HttpClient();
-    const handleResponse = await httpClient.get(`staff/${id}`);
+    const handleResponse = await httpClient.get(`/staff/${id}`);
     result = await handleResponse.data;
     console.log(result);
     if (result.status) {
