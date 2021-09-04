@@ -71,7 +71,7 @@ const Main: React.FC = (props: any) => {
             )}
             <Menu.Item key="1" icon={<PieChartOutlined />}>
               <NavLink
-                to="/"
+                to="/MoCS"
                 onClick={() => {
                   setHeaderTitle("Dashboard");
                 }}
